@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Hapus Produk</h2>
+<p>Yakin ingin menghapus produk <strong>{{ product.name }}</strong>?</p>
+<form method="POST">
+    {% csrf_token %}
+    <button type="submit">Ya, Hapus</button>
+    <a href="{% url 'main:show_product' product.id %}"><button type="button">Batal</button></a>
+</form>
+{% endblock content %}

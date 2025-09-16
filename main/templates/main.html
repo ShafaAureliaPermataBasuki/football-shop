@@ -1,13 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ app_name }}</title>
-</head>
-<body>
-    <h1>{{ app_name }} 🚀</h1>
-    <h2>Halo, Selamat datang di {{ app_name }} 🚀</h2>
-    <h4>Nama: {{ nama }}</h4>
-    <h4>Kelas: {{ kelas }}</h4>
-</body>
-</html>
+{% extends 'base.html' %}
+{% block content %}
+<h1>Daftar Produk</h1>
+
+<h5>NPM: </h5>
+<p>{{ NPM }}</p>
+
+<h5>Name:</h5>
+<p>{{ Name }}</p>
+
+<h5>Class:</h5>
+<p>{{ Class }}</p>
+
+<!-- Tombol Add Produk -->
+<a href="{% url 'main:create_product' %}">
+  <button>+ Add Product</button>
+</a>
+
+<hr>
+
+{% if not product_list %}
+<p>Belum ada data produk pada football shop.</p>
+{% else %}
+
+<table>
+  <tr>
+    <th>Nama Produk</th>
+    <th>Harga</th>
+    <th>Aksi</th>
+  </tr>
+  {% for product in product_list %}
+  <tr>
+    <td>{{ product.name }}</td>
+    <td>{{ product.price }}</td>
+    <td>
+      <a href="{% url 'main:show_product' product.id %}">
+        <button>Detail</button>
+      </a>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% endif %}
+{% endblock content %}

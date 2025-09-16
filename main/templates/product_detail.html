@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Detail Produk</h1>
+<img src="{{ product.thumbnail }}" alt="Thumbnail Produk" width="200" height="150">
+<ul>
+    <li><strong>Nama:</strong> {{ product.name }}</li>
+    <li><strong>Harga:</strong> Rp{{ product.price }}</li>
+    <li><strong>Deskripsi:</strong> {{ product.description }}</li>
+    <li><strong>Kategori:</strong> {{ product.category }}</li>
+    <li><strong>Ukuran:</strong> {{ product.size }}</li>
+    <li><strong>Rating:</strong> {{ product.rating }}</li>
+    <li><strong>Stok:</strong> {{ product.stock }}</li>
+    <li><strong>Featured:</strong> {% if product.is_featured %}Ya{% else %}Tidak{% endif %}</li>
+</ul>
+<a href="{% url 'main:show_main' %}"><button>Kembali</button></a>
+<a href="{% url 'main:edit_product' product.id %}"><button>Edit</button></a>
+<a href="{% url 'main:delete_product' product.id %}"><button>Hapus</button></a>
+{% endblock content %}

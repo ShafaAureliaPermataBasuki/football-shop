@@ -71,6 +71,11 @@ TEMPLATES = [
     },
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://shafa-aurelia-footballshop.pbp.cs.ui.ac.id"
+]
+
+
 WSGI_APPLICATION = 'football_shop.wsgi.application'
 
 

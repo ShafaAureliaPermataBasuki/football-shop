@@ -1,20 +1,30 @@
+import datetime
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.core import serializers
-from main.forms import ProductForm
-from main.models import Product
+from .models import Product
+from .forms import ProductForm
+from django.contrib.auth.decorators import login_required
 
 # Halaman utama -> tampilkan daftar produk
+@login_required(login_url='/login')
 def show_main(request):
-    product_list = Product.objects.all()
-
+    products = Product.objects.filter(user=request.user)   # hanya produk user login
     context = {
-        'Name': "Shafa Aurelia Permata Basuki",
-        'NPM': "2406432236",
-        'Class': "PBP C",
-        'product_list': product_list
+        'NPM': '2406432236',
+        'Name': 'Shafa Aurelia Permata Basuki',
+        'Class': 'PBP C',
+        'username': request.user.username,                 # tampilkan username
+        'last_login': request.COOKIES.get('last_login'),   # cookie last_login
+        'product_list': products,                          # produk sesuai user
     }
     return render(request, "main.html", context)
+
 
 # Serialize semua product ke XML
 def show_xml(request):
@@ -47,17 +57,21 @@ def show_json_by_id(request, product_id):
         return HttpResponse(status=404)
 
 # Form tambah produk
+@login_required(login_url='/login')
 def create_product(request):
-    form = ProductForm(request.POST or None)
-
-    if form.is_valid() and request.method == "POST":
-        form.save()
-        return redirect('main:show_main')
-
-    context = {'form': form}
-    return render(request, "create_product.html", context)
+    if request.method == "POST":
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.user = request.user  # hubungkan dengan user login
+            product.save()
+            return redirect('main:show_main')
+    else:
+        form = ProductForm()
+    return render(request, "create_product.html", {"form": form})
 
 # Detail produk
+@login_required(login_url='/login')
 def show_product(request, id):
     product = get_object_or_404(Product, pk=id)
 
@@ -81,3 +95,37 @@ def delete_product(request, id):
         product.delete()
         return redirect('main:show_main')
     return render(request, "delete_product.html", {'product': product})
+
+def register(request):
+    form = UserCreationForm()
+
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Akun berhasil dibuat!')
+            return redirect('main:login')
+    context = {'form': form}
+    return render(request, 'register.html', context)
+
+def login_user(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
+
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            response = HttpResponseRedirect(reverse("main:show_main"))
+            response.set_cookie('last_login', str(datetime.datetime.now()))
+            return response
+    else:
+        form = AuthenticationForm(request)
+    context = {'form': form}
+    return render(request, 'login.html', context)
+
+
+def logout_user(request):
+    logout(request)
+    response = HttpResponseRedirect(reverse('main:login'))
+    response.delete_cookie('last_login')
+    return response

@@ -11,9 +11,19 @@
 <h5>Class:</h5>
 <p>{{ Class }}</p>
 
+<h5>Username:</h5>
+<p>{{ username }}</p>
+
+<h5>Sesi terakhir login:</h5>
+<p>{{ last_login }}</p>
+
 <!-- Tombol Add Produk -->
 <a href="{% url 'main:create_product' %}">
   <button>+ Add Product</button>
+</a>
+
+<a href="{% url 'main:logout' %}">
+  <button>Logout</button>
 </a>
 
 <hr>
@@ -21,7 +31,6 @@
 {% if not product_list %}
 <p>Belum ada data produk pada football shop.</p>
 {% else %}
-
 <table>
   <tr>
     <th>Nama Produk</th>
@@ -31,7 +40,7 @@
   {% for product in product_list %}
   <tr>
     <td>{{ product.name }}</td>
-    <td>{{ product.price }}</td>
+    <td>Rp{{ product.price }}</td>
     <td>
       <a href="{% url 'main:show_product' product.id %}">
         <button>Detail</button>
@@ -40,6 +49,5 @@
   </tr>
   {% endfor %}
 </table>
-
 {% endif %}
 {% endblock content %}

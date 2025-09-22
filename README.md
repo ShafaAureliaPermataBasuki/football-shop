@@ -97,10 +97,13 @@ SOAL 2:
 
  Jawaban:
  => Authentication:
+ "Usernya siapa?"
  Proses verifikasi identitas user (username/password, token, OAuth, dll).
  Di Django: django.contrib.auth menyediakan model User, fungsi authenticate() untuk memeriksa kredensial, dan login() untuk membuat session pengguna.
 
  => Authorization:
+ "memverifikasi apakah bisa mengakses sesuatu atau tidak"git status
+
  pemeriksaan hak akses (permissions, group, role).
  Di Django: permission system (user.has_perm('app_label.codename')), decorator @permission_required, atribut is_staff/is_superuser, dan grup (Group) untuk mengelompokkan permission.
 

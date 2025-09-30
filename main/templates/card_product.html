@@ -34,6 +34,15 @@
     </div>
   </div>
 
+  {% if product.thumbnail %}
+  <img src="{{ product.thumbnail.url }}" alt="{{ product.name }}" class="w-full h-full object-cover">
+{% else %}
+  <div class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
+    No image
+  </div>
+{% endif %}
+
+
   <!-- Content -->
   <div class="p-5">
     <div class="flex items-center text-sm text-blue-600 mb-3">

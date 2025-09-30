@@ -1,20 +1,105 @@
-<article class="bg-white border rounded-lg shadow-sm hover:shadow-lg transition p-4">
-  {% if product.image_url %}
-    <img src="{{ product.image_url }}" alt="{{ product.name }}" class="w-full h-40 object-cover rounded">
-  {% else %}
-    <div class="w-full h-40 bg-gray-200 rounded"></div>
-  {% endif %}
+{% load static %}
+{% load humanize %}
 
-  <h3 class="text-lg font-semibold mt-3">{{ product.name }}</h3>
-  <p class="text-gray-600 text-sm">{{ product.description|truncatewords:15 }}</p>
-  <p class="text-green-600 font-bold mt-2">Rp {{ product.price }}</p>
+<article class="bg-blue-50 rounded-lg border border-blue-200 hover:shadow-lg transition-all duration-100 overflow-hidden ease-in-out hover:scale-105">
+  <!-- Thumbnail -->
+  <div class="aspect-[16/9] relative overflow-hidden">
+    <a href="{% url 'main:show_product' product.id %}">
+      {% if product.thumbnail %}
+        <img src="{{ product.thumbnail }}" alt="{{ product.name }}" class="w-full h-full object-cover">
+      {% else %}
+        <div class="w-full h-full bg-gray-200"></div>
+      {% endif %}
+    </a>
 
-  <div class="flex justify-between items-center mt-3">
-    <a href="{% url 'main:product_detail' product.id %}" class="text-green-600">Detail</a>
+    <!-- Category Badge -->
+    <div class="absolute top-3 left-3">
+      <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-blue-600 text-white">
+        {{ product.get_category_display }}
+      </span>
+    </div>
+
+    <!-- Status Badges -->
+    <div class="absolute top-3 right-3 flex space-x-2">
+      {% if product.is_featured %}
+        <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
+          ⭐ Featured
+        </span>
+      {% endif %}
+      {% if product.is_hot %}
+        <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-red-100 text-red-800">
+          🔥 Hot
+        </span>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="p-5">
+    <div class="flex items-center text-sm text-blue-600 mb-3">
+      {% if product.created_at %}
+        <time datetime="{{ product.created_at|date:'c' }}">
+          {{ product.created_at|date:"M j, Y" }}
+        </time>
+      {% else %}
+        <p>Unknown date</p>
+      {% endif %}
+      <span class="mx-2">•</span>
+      <span>{{ product.views }} views</span>
+    </div>
+
+    <h5 class="text-sm text-blue-600 mb-1">
+      {{ product.brand }}
+    </h5>
+
+    <h3 class="text-lg font-semibold text-gray-900 mb-3 line-clamp-2 leading-tight">
+      <a href="{% url 'main:show_product' product.id %}" class="hover:text-blue-600 transition-colors">
+        {{ product.name }}
+      </a>
+    </h3>
+
+    <!-- buat bintang berdasarkan rating -->
+    <div class="flex items-center mb-2">
+      <div class="flex mr-2">
+        {% for i in "12345" %}
+          {% if forloop.counter <= product.rating %}
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title> </title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.974a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.39 2.462a1 1 0 00-.364 1.118l1.287 3.974c.3.921-.755 1.688-1.54 1.118l-3.39-2.462a1 1 0 00-1.175 0l-3.39 2.462c-.784.57-1.838-.197-1.539-1.118l1.286-3.974a1 1 0 00-.364-1.118L2.225 9.4c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.951-.69l1.285-3.974z"></path></svg>
+          {% else %}
+            <svg class="w-4 h-4 text-gray-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.974a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.39 2.462a1 1 0 00-.364 1.118l1.287 3.974c.3.921-.755 1.688-1.54 1.118l-3.39-2.462a1 1 0 00-1.175 0l-3.39 2.462c-.784.57-1.838-.197-1.539-1.118l1.286-3.974a1 1 0 00-.364-1.118L2.225 9.4c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.951-.69l1.285-3.974z"></path></svg>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <span class="text-sm text-gray-600">({{ product.rating }} / 5.0)</span>
+    </div>
+
+    <h4 class="text-l font-bold text-green-600 mb-3">
+      Rp. {{ product.price|intcomma }}
+    </h4>
+
+    <p class="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-4">
+      {{ product.description|truncatewords:20 }}
+    </p>
+
+    <!-- Action Buttons -->
     {% if user.is_authenticated and product.user == user %}
-      <div class="space-x-2">
-        <a href="{% url 'main:edit_product' product.id %}" class="text-blue-500">Edit</a>
-        <a href="{% url 'main:delete_product' product.id %}" class="text-red-500">Hapus</a>
+      <div class="flex items-center justify-between pt-4 border-t border-blue-200">
+        <a href="{% url 'main:show_product' product.id %}" class="text-blue-600 hover:text-blue-700 font-medium text-sm transition-colors">
+          Product details →
+        </a>
+        <div class="flex space-x-2">
+          <a href="{% url 'main:edit_product' product.id %}" class="text-blue-600 hover:text-blue-700 text-sm transition-colors">
+            Edit
+          </a>
+          <a href="{% url 'main:delete_product' product.id %}" class="text-red-600 hover:text-red-700 text-sm transition-colors">
+            Delete
+          </a>
+        </div>
+      </div>
+    {% else %}
+      <div class="pt-4 border-t border-blue-200">
+        <a href="{% url 'main:show_product' product.id %}" class="text-blue-600 hover:text-blue-700 font-medium text-sm transition-colors">
+          Product details →
+        </a>
       </div>
     {% endif %}
   </div>

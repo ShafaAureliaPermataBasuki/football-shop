@@ -1,23 +1,34 @@
+import uuid
 from django.db import models
 from django.contrib.auth.models import User
-from django.utils.timezone import now
-import uuid
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 class Product(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)  # sementara nullable
-    name = models.CharField(max_length=255)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    CATEGORY_CHOICES = [
+        ('shoes', 'Shoes'),
+        ('clothes', 'Clothes'),
+        ('equipment', 'Equipment'),
+        ('accessories', 'Accessories'),
+        ('misc', 'Miscellaneous'),
+    ]
+    name = models.CharField(max_length=100)
+    brand = models.CharField(max_length=100)
     price = models.IntegerField()
     description = models.TextField()
+    rating = models.FloatField(default=0.0, validators=[MaxValueValidator(5.0), MinValueValidator(0.0)])
+    views = models.IntegerField(default=0) 
     thumbnail = models.URLField()
-    category = models.CharField(max_length=100)
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='shoes')
     is_featured = models.BooleanField(default=False)
-    size = models.CharField(max_length=50, default="M")
-    rating = models.FloatField(default=0)
-    stock = models.IntegerField(default=0)
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-
-    image_url = models.URLField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True, null=True) # kasih default supaya migration aman
-
+    
     def __str__(self):
         return self.name
+    
+    @property
+    def is_hot(self):
+        return self.views > 20
+
+    def increment_views(self):
+        self.views += 1
+        self.save()

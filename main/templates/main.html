@@ -1,53 +1,112 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>FootBallShop</title>
+{% endblock meta %}
+
 {% block content %}
-<h1>Daftar Produk</h1>
+{% include 'navbar.html' %}
 
-<h5>NPM: </h5>
-<p>{{ NPM }}</p>
+<div class="bg-blue-50 w-full pt-16 min-h-screen">  
 
-<h5>Name:</h5>
-<p>{{ Name }}</p>
+  <!-- Large Header Image Section -->
+  <div class="w-full relative">
+    <div class="w-full h-64 sm:h-80 md:h-96 relative overflow-hidden">
+      <img 
+        src="{% static 'image/FootBallShop-Header.png' %}" 
+        alt="Football Shop Banner" 
+        class="w-full h-full object-cover">
 
-<h5>Class:</h5>
-<p>{{ Class }}</p>
+      <!-- Overlay -->
+      <div class="absolute inset-0 bg-black bg-opacity-55 flex items-center justify-center">
+        <div class="text-center text-white p-4">
+          <h1 class="text-xl md:text-7xl font-bold mb-2 drop-shadow-lg">FootBallShop</h1>
+          <p class="text-xl md:text-xl drop-shadow-md">All Your Football Needs and Desires</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<h5>Username:</h5>
-<p>{{ username }}</p>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-<h5>Sesi terakhir login:</h5>
-<p>{{ last_login }}</p>
+    <!-- Filter Section -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 bg-white rounded-lg border border-blue-200 p-4">
+      <div class="mb-4 sm:mb-0">
+        <div class="relative">
+          <div class="flex items-center space-x-3">
+            <select
+              class="block w-full px-4 py-2 pr-8 rounded-md font-medium bg-white text-gray-700 border border-blue-300 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 hover:border-blue-600 hover:shadow-md"
+              onchange="window.location.href=this.value"
+            >
+              <option value="?owner=&category={{ request.GET.category|default:'' }}" {% if not request.GET.owner %}selected{% endif %}>
+              All Products
+              </option>
+              <option value="?owner=my&category={{ request.GET.category|default:'' }}" {% if request.GET.owner == 'my' %}selected{% endif %}>
+              My Products
+              </option>
+            </select>
+            <select
+              class="block w-full px-4 py-2 pr-8 rounded-md font-medium bg-white text-gray-700 border border-blue-300 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 hover:border-blue-600 hover:shadow-md"
+              onchange="window.location.href=this.value"
+            >
+              <option value="?owner={{ request.GET.owner|default:'' }}&category=" {% if not request.GET.category %}selected{% endif %}>
+              All Categories
+              </option>
+              <option value="?owner={{ request.GET.owner|default:'' }}&category=featured" {% if request.GET.category == 'featured' %}selected{% endif %}>
+              Featured
+              </option>
+              <option value="?owner={{ request.GET.owner|default:'' }}&category=hot" {% if request.GET.category == 'hot' %}selected{% endif %}>
+              Hot
+              </option>
+              <option value="?owner={{ request.GET.owner|default:'' }}&category=shoes" {% if request.GET.category == 'shoes' %}selected{% endif %}>
+              Shoes
+              </option>
+              <option value="?owner={{ request.GET.owner|default:'' }}&category=clothes" {% if request.GET.category == 'clothes' %}selected{% endif %}>
+              Clothes
+              </option>
+              <option value="?owner={{ request.GET.owner|default:'' }}&category=equipment" {% if request.GET.category == 'equipment' %}selected{% endif %}>
+              Equipment
+              </option>
+              <option value="?owner={{ request.GET.owner|default:'' }}&category=accessories" {% if request.GET.category == 'accessories' %}selected{% endif %}>
+              Accessories
+              </option>
+              <option value="?owner={{ request.GET.owner|default:'' }}&category=misc" {% if request.GET.category == 'misc' %}selected{% endif %}>
+              Miscellaneous
+              </option>
+            </select>
+            <a href="{% url 'main:add_product' %}" class="block w-full py-2 bg-blue-600 text-white rounded-md text-center hover:bg-blue-700 transition-colors">
+              Add Product
+            </a>
+          </div>
+        </div>
+      </div>
+      {% if user.is_authenticated %}
+        <div class="text-sm text-blue-600">
+          Last login: {{ last_login }}
+        </div>
+      {% endif %}
+    </div>
 
-<!-- Tombol Add Produk -->
-<a href="{% url 'main:create_product' %}">
-  <button>+ Add Product</button>
-</a>
-
-<a href="{% url 'main:logout' %}">
-  <button>Logout</button>
-</a>
-
-<hr>
-
-{% if not product_list %}
-<p>Belum ada data produk pada football shop.</p>
-{% else %}
-<table>
-  <tr>
-    <th>Nama Produk</th>
-    <th>Harga</th>
-    <th>Aksi</th>
-  </tr>
-  {% for product in product_list %}
-  <tr>
-    <td>{{ product.name }}</td>
-    <td>Rp{{ product.price }}</td>
-    <td>
-      <a href="{% url 'main:show_product' product.id %}">
-        <button>Detail</button>
-      </a>
-    </td>
-  </tr>
-  {% endfor %}
-</table>
-{% endif %}
+    <!-- Products Grid -->
+    {% if not product_list %}
+      <div class="bg-white rounded-lg border border-blue-200 p-12 text-center">
+        <div class="w-32 h-32 mx-auto mb-4">
+          <img src="{% static 'image/EmptyBox.jpg' %}" alt="No products available" class="w-full h-full object-contain">
+        </div>
+        <h3 class="text-lg font-medium text-gray-900 mb-2">No products yet :(</h3>
+        <p class="text-gray-500 mb-6">Add your products now by clicking the button below</p>
+        <a href="{% url 'main:add_product' %}" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+          + Add New Product
+        </a>
+      </div>
+    {% else %}
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for product in product_list %}
+          {% include 'card_product.html' with product=product %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>
 {% endblock content %}

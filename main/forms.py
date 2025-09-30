@@ -1,10 +1,10 @@
-from django import forms
-from .models import Product
+from django.forms import ModelForm
+from main.models import Product
 
-class ProductForm(forms.ModelForm):
+class ProductForm(ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'description', 'price', 'stock', 'image_url']
+        fields = ["brand", "name", "description", "price", "rating", "thumbnail", "category", "is_featured"]
 
     def clean_price(self):
         price = self.cleaned_data.get('price')

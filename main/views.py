@@ -10,6 +10,7 @@ from django.core import serializers
 from .models import Product
 from .forms import ProductForm
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
 
 # Halaman utama -> tampilkan daftar produk
 @login_required(login_url='/login')
@@ -29,14 +30,19 @@ def product_list(request):
     products = Product.objects.all()
     return render(request, "product_list.html", {"products": products})
 
+
+
 @login_required
 def add_product(request):
-    form = ProductForm(request.POST or None)
-    if form.is_valid():
-        product = form.save(commit=False)
-        product.user = request.user
-        product.save()
-        return redirect("main:product_list")
+    if request.method == "POST":
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.user = request.user
+            product.save()
+            return redirect('main:show_main')
+    else:
+        form = ProductForm()
     return render(request, "add_product.html", {"form": form})
 
 @login_required

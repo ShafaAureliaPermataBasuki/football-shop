@@ -46,3 +46,11 @@
     border-color: #dc2626; /* merah */
     box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1); /* efek glow merah */
 }
+
+.form-box {
+    border: 1px solid black;     /* kotak hitam */
+    padding: 10px;               /* ruang dalam */
+    margin: 10px 0;              /* jarak antar field */
+    border-radius: 6px;          /* biar gak kaku, opsional */
+    background-color: #f9f9f9;   /* biar ada kontras */
+}

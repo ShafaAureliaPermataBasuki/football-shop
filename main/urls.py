@@ -22,5 +22,10 @@ urlpatterns = [
     path('register/', register, name='register'),
     path('login/', login_user, name='login'),
     path('logout/', logout_user, name='logout'),
+    path("", views.product_list, name="product_list"),
+    path("add/", views.add_product, name="add_product"),
+    path("product/<uuid:id>/", views.product_detail, name="product_detail"),
+    path("product/<uuid:id>/edit/", views.edit_product, name="edit_product"),
+    path("product/<uuid:id>/delete/", views.delete_product, name="delete_product"),
 ]
 

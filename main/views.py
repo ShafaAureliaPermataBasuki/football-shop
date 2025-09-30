@@ -25,6 +25,38 @@ def show_main(request):
     }
     return render(request, "main.html", context)
 
+def product_list(request):
+    products = Product.objects.all()
+    return render(request, "product_list.html", {"products": products})
+
+@login_required
+def add_product(request):
+    form = ProductForm(request.POST or None)
+    if form.is_valid():
+        product = form.save(commit=False)
+        product.user = request.user
+        product.save()
+        return redirect("main:product_list")
+    return render(request, "add_product.html", {"form": form})
+
+@login_required
+def edit_product(request, id):
+    product = get_object_or_404(Product, pk=id, user=request.user)
+    form = ProductForm(request.POST or None, instance=product)
+    if form.is_valid() and request.method == "POST":
+        form.save()
+        return redirect("main:product_list")
+    return render(request, "edit_product.html", {"form": form})
+
+@login_required
+def delete_product(request, id):
+    product = get_object_or_404(Product, pk=id, user=request.user)
+    product.delete()
+    return redirect("main:product_list")
+
+def product_detail(request, id):
+    product = get_object_or_404(Product, pk=id)
+    return render(request, "product_detail.html", {"product": product})
 
 # Serialize semua product ke XML
 def show_xml(request):

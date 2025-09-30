@@ -196,3 +196,6 @@ SOAL 5:
  8) Testing manual & pengecekan
  9) Commit & push ke GitHub
  
+
+
+TUGAS 5

@@ -6,7 +6,7 @@
   <div class="aspect-[16/9] relative overflow-hidden">
     <a href="{% url 'main:show_product' product.id %}">
       {% if product.thumbnail %}
-        <img src="{{ product.thumbnail }}" alt="{{ product.name }}" class="w-full h-full object-cover">
+        <img src="{{ product.thumbnail.url }}" alt="{{ product.name }}" class="w-full h-full object-cover">
       {% else %}
         <div class="w-full h-full bg-gray-200"></div>
       {% endif %}

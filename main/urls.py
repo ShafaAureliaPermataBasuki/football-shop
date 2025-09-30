@@ -16,4 +16,8 @@ urlpatterns = [
     path('logout/', logout_user, name='logout'),
     path('edit_product/<str:id>/', edit_product, name='edit_product'),
     path('delete_product/<str:id>/', delete_product, name='delete_product'),
+    path('', include('main.urls')),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

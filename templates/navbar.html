@@ -7,7 +7,7 @@
           <h1 class="text-xl font-semibold text-gray-900">
             <a href="{% url 'main:show_main' %}">
               <img src="{% static 'image/Logo.jpg' %}" alt="Logo" class="inline h-8 w-8 mr-1 mb-1">
-              <span class="text-gray-600">Beli</span>Bola
+              <span class="text-gray-600">FootBall</span>Shop
             </a>
           </h1>
         </div>
@@ -36,7 +36,7 @@
           {% if user.is_authenticated %}
             <div class="text-right">
               <div class="text-sm font-medium text-gray-900">{{ name|default:user.username }}</div>
-              <div class="text-xs text-gray-500">{{ npm|default:"2406496416" }} - {{ class|default:"PBP E" }}</div>
+              <div class="text-xs text-gray-500">{{ npm|default:"2406432236" }} - {{ class|default:"PBP C" }}</div>
             </div>
             <a href="{% url 'main:logout' %}" class="text-red-600 hover:text-red-700 font-medium transition-colors">
               Logout
@@ -88,7 +88,7 @@
           {% if user.is_authenticated %}
             <div class="mb-4">
               <div class="font-medium text-gray-900">{{ name|default:user.username }}</div>
-              <div class="text-sm text-gray-500">{{ npm|default:"2406496416" }} - {{ class|default:"PBP E" }}</div>
+              <div class="text-sm text-gray-500">{{ npm|default:"2406432236" }} - {{ class|default:"" }}</div>
             </div>
             <a href="{% url 'main:logout' %}" class="block text-red-600 hover:text-red-700 font-medium py-3 transition-colors">
               Logout

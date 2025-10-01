@@ -1,56 +1,75 @@
+/* Custom Color Palette Variables */
+:root {
+  --color-cream: #EEE9DA;
+  --color-light-blue: #BDCDD6;
+  --color-medium-blue: #93BFCF;
+  --color-dark-blue: #6096B4;
+  --color-darker-blue: #4A7A94;
+}
+
 .form-style form input, form textarea, form select {
-    width: 100%;
-    padding: 0.5rem;
-    border: 2px solid #bcbcbc;
-    border-radius: 0.375rem;
+  width: 100%;
+  padding: 0.5rem;
+  border: 2px solid var(--color-light-blue);
+  border-radius: 0.375rem;
+  background-color: white;
 }
 
 .form-style form input:focus, form textarea:focus, form select:focus {
-    outline: none;
-    border-color: #dc2626; /* merah */
-    box-shadow: 0 0 0 3px #dc2626;
+  outline: none;
+  border-color: var(--color-dark-blue);
+  box-shadow: 0 0 0 3px rgba(96, 150, 180, 0.2);
 }
 
 .form-style input[type="checkbox"] {
-    width: 1.25rem;
-    height: 1.25rem;
-    padding: 0;
-    border: 2px solid #d1d5db;
-    border-radius: 0.375rem;
-    background-color: white;
-    cursor: pointer;
-    position: relative;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  padding: 0;
+  border: 2px solid var(--color-light-blue);
+  border-radius: 0.375rem;
+  background-color: white;
+  cursor: pointer;
+  position: relative;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
 }
 
 .form-style input[type="checkbox"]:checked {
-    background-color: #dc2626; /* merah */
-    border-color: #dc2626;
+  background-color: var(--color-dark-blue);
+  border-color: var(--color-dark-blue);
 }
 
 .form-style input[type="checkbox"]:checked::after {
-    content: '✓';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    font-weight: bold;
-    font-size: 0.875rem;
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-weight: bold;
+  font-size: 0.875rem;
 }
 
 .form-style input[type="checkbox"]:focus {
-    outline: none;
-    border-color: #dc2626; /* merah */
-    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1); /* efek glow merah */
+  outline: none;
+  border-color: var(--color-dark-blue);
+  box-shadow: 0 0 0 3px rgba(96, 150, 180, 0.1);
 }
 
 .form-box {
-    border: 1px solid black;     /* kotak hitam */
-    padding: 10px;               /* ruang dalam */
-    margin: 10px 0;              /* jarak antar field */
-    border-radius: 6px;          /* biar gak kaku, opsional */
-    background-color: #f9f9f9;   /* biar ada kontras */
+  border: 1px solid var(--color-medium-blue);
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 6px;
+  background-color: var(--color-cream);
+}
+
+/* Background gradients */
+.bg-gradient-main {
+  background: linear-gradient(135deg, var(--color-cream) 0%, var(--color-light-blue) 50%, var(--color-medium-blue) 100%);
+}
+
+.bg-gradient-card {
+  background: linear-gradient(to bottom, white, var(--color-cream));
 }

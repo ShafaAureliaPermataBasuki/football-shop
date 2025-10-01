@@ -5,36 +5,35 @@
 
 {% block content %}
 {% include 'navbar.html' %}
-<div class="bg-blue-50 w-full min-h-screen">
+<div class="w-full min-h-screen" style="background: linear-gradient(135deg, #EEE9DA 0%, #BDCDD6 50%, #93BFCF 100%);">
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-8">
-    
+   
     <!-- Back Navigation -->
     <div class="mb-6">
-      <a href="{% url 'main:show_main' %}" class="text-blue-600 hover:text-blue-900 font-medium transition-colors">
+      <a href="{% url 'main:show_main' %}" class="font-medium transition-colors" style="color: #6096B4;" onmouseover="this.style.color='#4A7A94'" onmouseout="this.style.color='#6096B4'">
         ← Back to Home
       </a>
     </div>
-    
+   
     <!-- Form -->
-    <div class="bg-white rounded-lg border border-blue-200 p-6 sm:p-8 form-style">
+    <div class="bg-white rounded-lg p-6 sm:p-8 form-style" style="border: 2px solid #BDCDD6; box-shadow: 0 4px 12px rgba(96, 150, 180, 0.2);">
       <div class="mb-8 text-center">
-        <h1 class="text-2xl font-bold text-gray-900 mb-2">Add New Product</h1>
-        <p class="text-gray-600">Add a new product</p>
+        <h1 class="text-2xl font-bold mb-2" style="color: #6096B4;">Add New Product</h1>
+        <p style="color: #93BFCF;">Add a new product</p>
       </div>
-      
-      <!-- ✅ cuma ada 1 form -->
+     
       <form method="POST" enctype="multipart/form-data" class="space-y-6">
         {% csrf_token %}
         {% for field in form %}
-          <div class="border border-black rounded-md p-4 bg-gray-50">
-            <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+          <div class="rounded-md p-4" style="border: 2px solid #93BFCF; background-color: #EEE9DA;">
+            <label for="{{ field.id_for_label }}" class="block text-sm font-medium mb-2" style="color: #6096B4;">
               {{ field.label }}
             </label>
             <div class="w-full">
               {{ field }}
             </div>
             {% if field.help_text %}
-              <p class="mt-1 text-sm text-gray-500">{{ field.help_text }}</p>
+              <p class="mt-1 text-sm" style="color: #93BFCF;">{{ field.help_text }}</p>
             {% endif %}
             {% for error in field.errors %}
               <p class="mt-1 text-sm text-red-600">{{ error }}</p>
@@ -42,11 +41,11 @@
           </div>
         {% endfor %}
 
-        <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-blue-200">
-          <a href="{% url 'main:show_main' %}" class="order-2 sm:order-1 px-6 py-3 border border-blue-300 text-blue-700 rounded-md font-medium hover:bg-blue-50 transition-colors text-center">
+        <div class="flex flex-col sm:flex-row gap-4 pt-6" style="border-top: 2px solid #BDCDD6;">
+          <a href="{% url 'main:show_main' %}" class="order-2 sm:order-1 px-6 py-3 rounded-md font-medium text-center transition-colors" style="border: 2px solid #93BFCF; color: #6096B4;" onmouseover="this.style.backgroundColor='#EEE9DA'" onmouseout="this.style.backgroundColor='transparent'">
             Cancel
           </a>
-          <button type="submit" class="order-1 sm:order-2 flex-1 bg-blue-600 text-white px-6 py-3 rounded-md font-medium hover:bg-blue-700 transition-colors">
+          <button type="submit" class="order-1 sm:order-2 flex-1 text-white px-6 py-3 rounded-md font-medium transition-colors" style="background-color: #6096B4;" onmouseover="this.style.backgroundColor='#4A7A94'" onmouseout="this.style.backgroundColor='#6096B4'">
             Add Product
           </button>
         </div>

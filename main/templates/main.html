@@ -8,18 +8,18 @@
 {% block content %}
 {% include 'navbar.html' %}
 
-<div class="bg-blue-50 w-full pt-16 min-h-screen">  
+<div class="w-full pt-16 min-h-screen" style="background: linear-gradient(135deg, #EEE9DA 0%, #BDCDD6 50%, #93BFCF 100%);"> 
 
   <!-- Large Header Image Section -->
   <div class="w-full relative">
     <div class="w-full h-64 sm:h-80 md:h-96 relative overflow-hidden">
-      <img 
-        src="{% static 'image/FootBallShop-Header.png' %}" 
-        alt="Football Shop Banner" 
+      <img
+        src="{% static 'image/FootBallShop-Header.png' %}"
+        alt="Football Shop Banner"
         class="w-full h-full object-cover">
 
       <!-- Overlay -->
-      <div class="absolute inset-0 bg-black bg-opacity-55 flex items-center justify-center">
+      <div class="absolute inset-0 flex items-center justify-center" style="background: linear-gradient(135deg, rgba(96, 150, 180, 0.7) 0%, rgba(147, 191, 207, 0.6) 100%);">
         <div class="text-center text-white p-4">
           <h1 class="text-xl md:text-7xl font-bold mb-2 drop-shadow-lg">FootBallShop</h1>
           <p class="text-xl md:text-xl drop-shadow-md">All Your Football Needs and Desires</p>
@@ -31,13 +31,16 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
     <!-- Filter Section -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 bg-white rounded-lg border border-blue-200 p-4">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 bg-white rounded-lg p-4" style="border: 2px solid #BDCDD6; box-shadow: 0 2px 8px rgba(96, 150, 180, 0.15);">
       <div class="mb-4 sm:mb-0">
         <div class="relative">
           <div class="flex items-center space-x-3">
             <select
-              class="block w-full px-4 py-2 pr-8 rounded-md font-medium bg-white text-gray-700 border border-blue-300 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 hover:border-blue-600 hover:shadow-md"
+              class="block w-full px-4 py-2 pr-8 rounded-md font-medium bg-white text-gray-700 transition-colors focus:outline-none focus:ring-2 focus:border-transparent"
+              style="border: 2px solid #93BFCF; color: #6096B4;"
               onchange="window.location.href=this.value"
+              onfocus="this.style.borderColor='#6096B4'; this.style.boxShadow='0 0 0 3px rgba(96, 150, 180, 0.2)'"
+              onblur="this.style.borderColor='#93BFCF'; this.style.boxShadow='none'"
             >
               <option value="?owner=&category={{ request.GET.category|default:'' }}" {% if not request.GET.owner %}selected{% endif %}>
               All Products
@@ -47,8 +50,11 @@
               </option>
             </select>
             <select
-              class="block w-full px-4 py-2 pr-8 rounded-md font-medium bg-white text-gray-700 border border-blue-300 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 hover:border-blue-600 hover:shadow-md"
+              class="block w-full px-4 py-2 pr-8 rounded-md font-medium bg-white text-gray-700 transition-colors focus:outline-none focus:ring-2 focus:border-transparent"
+              style="border: 2px solid #93BFCF; color: #6096B4;"
               onchange="window.location.href=this.value"
+              onfocus="this.style.borderColor='#6096B4'; this.style.boxShadow='0 0 0 3px rgba(96, 150, 180, 0.2)'"
+              onblur="this.style.borderColor='#93BFCF'; this.style.boxShadow='none'"
             >
               <option value="?owner={{ request.GET.owner|default:'' }}&category=" {% if not request.GET.category %}selected{% endif %}>
               All Categories
@@ -75,14 +81,14 @@
               Miscellaneous
               </option>
             </select>
-            <a href="{% url 'main:add_product' %}" class="block w-full py-2 bg-blue-600 text-white rounded-md text-center hover:bg-blue-700 transition-colors">
+            <a href="{% url 'main:add_product' %}" class="block w-full py-2 text-white rounded-md text-center transition-colors" style="background-color: #6096B4;" onmouseover="this.style.backgroundColor='#4A7A94'" onmouseout="this.style.backgroundColor='#6096B4'">
               Add Product
             </a>
           </div>
         </div>
       </div>
       {% if user.is_authenticated %}
-        <div class="text-sm text-blue-600">
+        <div class="text-sm" style="color: #6096B4;">
           Last login: {{ last_login }}
         </div>
       {% endif %}
@@ -90,13 +96,13 @@
 
     <!-- Products Grid -->
     {% if not product_list %}
-      <div class="bg-white rounded-lg border border-blue-200 p-12 text-center">
+      <div class="bg-white rounded-lg p-12 text-center" style="border: 2px solid #BDCDD6; box-shadow: 0 2px 8px rgba(96, 150, 180, 0.15);">
         <div class="w-32 h-32 mx-auto mb-4">
           <img src="{% static 'image/EmptyBox.jpg' %}" alt="No products available" class="w-full h-full object-contain">
         </div>
-        <h3 class="text-lg font-medium text-gray-900 mb-2">No products yet :(</h3>
-        <p class="text-gray-500 mb-6">Add your products now by clicking the button below</p>
-        <a href="{% url 'main:add_product' %}" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+        <h3 class="text-lg font-medium mb-2" style="color: #6096B4;">No products yet :(</h3>
+        <p class="mb-6" style="color: #93BFCF;">Add your products now by clicking the button below</p>
+        <a href="{% url 'main:add_product' %}" class="inline-flex items-center px-4 py-2 text-white rounded-md transition-colors" style="background-color: #6096B4;" onmouseover="this.style.backgroundColor='#4A7A94'" onmouseout="this.style.backgroundColor='#6096B4'">
           + Add New Product
         </a>
       </div>

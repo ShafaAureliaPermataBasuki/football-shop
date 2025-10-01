@@ -13,9 +13,9 @@
   <div class="max-w-4xl mx-auto bg-white rounded-lg border border-blue-200 shadow-sm hover:shadow-md transition-all duration-150 p-8">
     
     <!-- Thumbnail -->
-    <div class="aspect-[16/9] relative overflow-hidden rounded-lg mb-6">
+      <div class="aspect-[16/9] relative overflow-hidden rounded-lg mb-6">
       {% if product.thumbnail %}
-        <img src="{{ product.thumbnail.url }}" alt="{{ product.name }}" class="w-full h-full object-cover">
+        <img src="{{ product.thumbnail }}" alt="{{ product.name }}" class="w-full h-full object-cover">
       {% else %}
         <div class="w-full h-full bg-gray-200 flex items-center justify-center">
           <span class="text-gray-500">No image available</span>

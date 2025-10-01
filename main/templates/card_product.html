@@ -3,14 +3,16 @@
 
 <article class="bg-blue-50 rounded-lg border border-blue-200 hover:shadow-lg transition-all duration-100 overflow-hidden ease-in-out hover:scale-105">
   <!-- Thumbnail -->
-  <div class="aspect-[16/9] relative overflow-hidden">
-    <a href="{% url 'main:show_product' product.id %}">
-      {% if product.thumbnail %}
-        <img src="{{ product.thumbnail.url }}" alt="{{ product.name }}" class="w-full h-full object-cover">
-      {% else %}
-        <div class="w-full h-full bg-gray-200"></div>
-      {% endif %}
-    </a>
+<div class="aspect-[16/9] relative overflow-hidden">
+  <a href="{% url 'main:show_product' product.id %}">
+    {% if product.thumbnail %}
+      <img src="{{ product.thumbnail }}" alt="{{ product.name }}" class="w-full h-full object-cover">
+    {% else %}
+      <div class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
+        No image
+      </div>
+    {% endif %}
+  </a>
 
     <!-- Category Badge -->
     <div class="absolute top-3 left-3">
@@ -33,14 +35,6 @@
       {% endif %}
     </div>
   </div>
-
-  {% if product.thumbnail %}
-  <img src="{{ product.thumbnail.url }}" alt="{{ product.name }}" class="w-full h-full object-cover">
-{% else %}
-  <div class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
-    No image
-  </div>
-{% endif %}
 
 
   <!-- Content -->

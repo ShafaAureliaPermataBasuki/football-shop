@@ -199,4 +199,46 @@ SOAL 5:
 
 
 TUGAS 5
-...
+1. Urutan prioritas CSS selector
+Jika ada lebih dari satu CSS selector yang cocok untuk sebuah elemen HTML, browser akan menentukan gaya akhir berdasarkan tingkat prioritas (specificity). Urutan prioritas dari yang paling kuat sampai paling lemah adalah:
+- Aturan dengan !important
+- Inline style (style="...")
+- ID selector (#id)
+- Class selector, attribute selector, pseudo-class (.class, [attr], :hover)
+- Element selector dan pseudo-element (div, p, ::after)
+Jika dua aturan memiliki tingkat prioritas yang sama, maka aturan yang ditulis terakhir akan menang.
+
+2. Pentingnya responsive design
+Responsive design adalah konsep agar tampilan web menyesuaikan dengan ukuran layar perangkat (desktop, tablet, smartphone). Konsep ini penting karena mayoritas pengguna internet mengakses lewat mobile, dan pengalaman yang buruk dapat menurunkan kenyamanan serta konversi pengguna. Google juga memberi peringkat lebih baik pada situs yang mobile-friendly.
+Contoh aplikasi yang sudah menerapkan responsive design: Tokopedia, Shopee, Wikipedia.
+Contoh aplikasi yang belum responsive: beberapa situs pemerintahan atau situs lama dengan layout fixed width sehingga harus di-zoom atau scroll horizontal di HP.
+
+3. Perbedaan margin, border, dan padding
+Margin adalah jarak di luar elemen yang memisahkan dengan elemen lain.
+Border adalah garis yang membungkus elemen.
+Padding adalah jarak antara konten dan border di dalam elemen.
+Implementasi:
+.card {
+margin: 12px; /* ruang luar /
+border: 2px solid black; / garis tepi /
+padding: 16px; / ruang dalam */
+}
+
+4. Konsep flexbox dan grid layout
+Flexbox digunakan untuk mengatur tata letak satu dimensi (baris atau kolom). Cocok untuk navbar, tombol, atau alignment dalam sebuah card.
+Properti penting: display: flex, flex-direction, justify-content, align-items, gap.
+Grid digunakan untuk tata letak dua dimensi (baris dan kolom). Cocok untuk halaman utama atau daftar produk.
+Properti penting: display: grid, grid-template-columns, grid-template-rows, gap.
+Flexbox biasanya dipakai untuk mengatur isi di dalam satu baris atau kolom, sedangkan grid lebih cocok untuk layout besar dan kompleks.
+
+5. Langkah-langkah implementasi checklist
+- Membuat project Django football_shop dan aplikasi main.
+- Menambahkan model Product dengan field sesuai kebutuhan (name, price, description, thumbnail, image_url, category, stock, rating, size, is_featured, created_at).
+- Membuat form menggunakan ModelForm untuk input data produk.
+- Membuat views untuk menampilkan daftar produk, detail produk, tambah produk, edit produk, dan hapus produk.
+- Membuat template HTML seperti base.html, navbar.html, product_list.html, card_product.html, add_product.html, dan edit_product.html.
+- Menambahkan CSS agar tampilan lebih rapi dan responsive, bisa menggunakan Tailwind atau Bootstrap.
+- Menguji aplikasi di localhost, memastikan form, CRUD, dan tampilan responsive berjalan dengan baik.
+- Menambahkan jawaban teori ke README.md sesuai instruksi tugas.
+
+6. Melakukan add-commit-push ke GitHub

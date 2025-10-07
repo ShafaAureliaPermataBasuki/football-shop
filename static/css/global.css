@@ -7,18 +7,173 @@
   --color-darker-blue: #4A7A94;
 }
 
+/* Keyframe Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes rotateIn {
+  from {
+    opacity: 0;
+    transform: rotate(-180deg) scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -5px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@keyframes tooltipBounce {
+  0%, 100% {
+    transform: translate(-50%, 0);
+  }
+  50% {
+    transform: translate(-50%, -5px);
+  }
+}
+
+/* Animation Classes */
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.animate-slide-left {
+  animation: slideInFromLeft 0.8s ease-out forwards;
+}
+
+.animate-slide-right {
+  animation: slideInFromRight 0.8s ease-out forwards;
+}
+
+.animate-bounce {
+  animation: bounce 2s ease-in-out infinite;
+}
+
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.5s ease-out forwards;
+}
+
+.animate-rotate-in {
+  animation: rotateIn 0.8s ease-out forwards;
+}
+
+/* Delayed animations */
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+
+/* Form Styles */
 .form-style form input, form textarea, form select {
   width: 100%;
   padding: 0.5rem;
   border: 2px solid var(--color-light-blue);
   border-radius: 0.375rem;
   background-color: white;
+  transition: all 0.3s ease;
 }
 
 .form-style form input:focus, form textarea:focus, form select:focus {
   outline: none;
   border-color: var(--color-dark-blue);
   box-shadow: 0 0 0 3px rgba(96, 150, 180, 0.2);
+  transform: translateY(-2px);
 }
 
 .form-style input[type="checkbox"] {
@@ -33,11 +188,13 @@
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
+  transition: all 0.3s ease;
 }
 
 .form-style input[type="checkbox"]:checked {
   background-color: var(--color-dark-blue);
   border-color: var(--color-dark-blue);
+  transform: scale(1.1);
 }
 
 .form-style input[type="checkbox"]:checked::after {
@@ -57,12 +214,193 @@
   box-shadow: 0 0 0 3px rgba(96, 150, 180, 0.1);
 }
 
-.form-box {
-  border: 1px solid var(--color-medium-blue);
-  padding: 10px;
-  margin: 10px 0;
-  border-radius: 6px;
+/* Fix untuk select dropdown agar tidak tertimpa */
+.form-style select,
+select {
+  position: relative;
+  z-index: 10;
+  background-color: white;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 2.5rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236096B4'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 1.5em 1.5em;
+}
+
+/* Container untuk select dengan icon */
+.select-with-icon {
+  position: relative;
+}
+
+.select-with-icon .icon-left {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  pointer-events: none;
+}
+
+.select-with-icon select {
+  padding-left: 2.5rem;
+}
+
+/* Fix untuk mobile menu agar tidak tertimpa */
+.mobile-menu {
+  position: relative;
+  z-index: 40;
+}
+
+/* Pastikan navbar memiliki z-index yang tepat */
+nav {
+  z-index: 50 !important;
+}
+
+/* Image Upload Preview */
+.image-upload-container {
+  position: relative;
+  border: 2px dashed var(--color-light-blue);
+  border-radius: 0.5rem;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
   background-color: var(--color-cream);
+}
+
+.image-upload-container:hover {
+  border-color: var(--color-dark-blue);
+  background-color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(96, 150, 180, 0.15);
+}
+
+.image-preview {
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: 0.5rem;
+  margin: 1rem auto;
+  display: block;
+  animation: scaleIn 0.5s ease-out;
+}
+
+/* Category Cards */
+.category-card-wrapper {
+  position: relative;
+}
+
+.category-card {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.category-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.category-card:hover::before {
+  left: 100%;
+}
+
+.category-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(96, 150, 180, 0.3);
+}
+
+/* Tooltip styling */
+.tooltip {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  animation: tooltipFadeIn 0.3s ease-out;
+}
+
+.group:hover .tooltip {
+  animation: tooltipBounce 0.5s ease-out;
+}
+
+/* Shimmer Effect */
+.shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Button Hover Effects */
+button, .btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+button::after, .btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+button:hover::after, .btn:hover::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* Card Hover Effects */
+.product-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.product-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(96, 150, 180, 0.1), rgba(147, 191, 207, 0.1));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.product-card:hover::before {
+  opacity: 1;
+}
+
+.product-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 15px 35px rgba(96, 150, 180, 0.3);
+}
+
+/* Icon Animations */
+.icon-spin {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Background gradients */
@@ -73,3 +411,165 @@
 .bg-gradient-card {
   background: linear-gradient(to bottom, white, var(--color-cream));
 }
+
+/* Loading Animation */
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid var(--color-light-blue);
+  border-top-color: var(--color-dark-blue);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Smooth Scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Stagger Animation for Lists */
+.stagger-item {
+  opacity: 0;
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+/* Hero Parallax Styles */
+.hero-parallax {
+  position: relative;
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+}
+
+#particles-js {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 10;
+}
+
+/* ========== GLASSMORPHISM & 3D EFFECTS ========== */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.card-3d {
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.card-3d:hover {
+  transform: perspective(1000px) rotateX(5deg) rotateY(5deg) translateY(-10px);
+}
+
+/* ========== SKELETON LOADING ========== */
+@keyframes skeleton-loading {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 0.5rem;
+}
+
+/* ========== ADVANCED FILTER ANIMATIONS ========== */
+.filter-btn-advanced {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.filter-btn-advanced::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.filter-btn-advanced:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.filter-btn-advanced.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  transform: scale(1.05);
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+  color: white !important;
+}
+
+.advanced-filter-dropdown {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.advanced-filter-dropdown.show {
+  max-height: 600px;
+}
+
+/* ========== SEARCH BOX ANIMATIONS ========== */
+.search-box {
+  transition: all 0.3s;
+}
+
+.search-box:focus {
+  box-shadow: 0 0 0 4px rgba(96, 150, 180, 0.2);
+  transform: translateY(-2px);
+}
+
+/* ========== TOAST NOTIFICATIONS ========== */
+.toast {
+  animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.toast-exit {
+  animation: slideOutRight 0.3s ease-in;
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(150%);
+    opacity: 0;
+  }
+}
+
+.stagger-item:nth-child(1) { animation-delay: 0.1s; }
+.stagger-item:nth-child(2) { animation-delay: 0.2s; }
+.stagger-item:nth-child(3) { animation-delay: 0.3s; }
+.stagger-item:nth-child(4) { animation-delay: 0.4s; }
+.stagger-item:nth-child(5) { animation-delay: 0.5s; }
+.stagger-item:nth-child(6) { animation-delay: 0.6s; }
+.stagger-item:nth-child(7) { animation-delay: 0.7s; }
+.stagger-item:nth-child(8) { animation-delay: 0.8s; }
+

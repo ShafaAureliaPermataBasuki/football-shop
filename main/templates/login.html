@@ -2,6 +2,51 @@
 
 {% block meta %}
 <title>Login - FootBallShop</title>
+<style>
+/* Toast Styles */
+.toast {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  color: white;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 1001;
+  animation: slideInRight 0.3s ease-out;
+  max-width: 400px;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.toast.success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.toast.error {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+.toast.info {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+/* Loading button */
+.btn-loading {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+</style>
 {% endblock meta %}
 
 {% block content %}
@@ -13,32 +58,7 @@
         <p style="color: #93BFCF;">Welcome back to FootBallShop</p>
       </div>
 
-      <!-- Form Errors Display -->
-      {% if form.non_field_errors %}
-        <div class="mb-6">
-          {% for error in form.non_field_errors %}
-            <div class="px-4 py-3 rounded-md text-sm border bg-red-50 border-red-200 text-red-700">
-              {{ error }}
-            </div>
-          {% endfor %}
-        </div>
-      {% endif %}
-
-      {% if form.errors %}
-        <div class="mb-6">
-          {% for field, errors in form.errors.items %}
-            {% if field != '__all__' %}
-              {% for error in errors %}
-                <div class="px-4 py-3 rounded-md text-sm border bg-red-50 border-red-200 text-red-700 mb-2">
-                  <strong>{{ field|title }}:</strong> {{ error }}
-                </div>
-              {% endfor %}
-            {% endif %}
-          {% endfor %}
-        </div>
-      {% endif %}
-
-      <form method="POST" action="" class="space-y-6">
+      <form id="loginForm" class="space-y-6">
         {% csrf_token %}
         
         <div>
@@ -71,34 +91,14 @@
 
         <button
           type="submit"
+          id="loginButton"
           class="w-full text-white font-medium py-3 px-4 rounded-md transition-colors"
           style="background-color: #6096B4;"
-          onmouseover="this.style.backgroundColor='#4A7A94'"
-          onmouseout="this.style.backgroundColor='#6096B4'">
+          onmouseover="if(!this.disabled) this.style.backgroundColor='#4A7A94'"
+          onmouseout="if(!this.disabled) this.style.backgroundColor='#6096B4'">
           Sign In
         </button>
       </form>
-
-      <!-- Messages Display -->
-      {% if messages %}
-        <div class="mt-6">
-          {% for message in messages %}
-            {% if message.tags == 'success' %}
-              <div class="px-4 py-3 rounded-md text-sm border" style="background-color: #EEE9DA; border-color: #BDCDD6; color: #6096B4;">
-                {{ message }}
-              </div>
-            {% elif message.tags == 'error' %}
-              <div class="px-4 py-3 rounded-md text-sm border bg-red-50 border-red-200 text-red-700">
-                {{ message }}
-              </div>
-            {% else %}
-              <div class="px-4 py-3 rounded-md text-sm border" style="background-color: #EEE9DA; border-color: #BDCDD6; color: #6096B4;">
-                {{ message }}
-              </div>
-            {% endif %}
-          {% endfor %}
-        </div>
-      {% endif %}
 
       <div class="mt-6 text-center pt-6" style="border-top: 1px solid #BDCDD6;">
         <p class="text-sm" style="color: #93BFCF;">
@@ -111,4 +111,65 @@
     </div>
   </div>
 </div>
+
+<script>
+// Show toast notification
+function showToast(message, type = 'success') {
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.innerHTML = `
+    <div class="flex items-center gap-2">
+      <span class="text-xl">${type === 'success' ? '✓' : type === 'error' ? '✗' : 'ℹ'}</span>
+      <span>${message}</span>
+    </div>
+  `;
+  document.body.appendChild(toast);
+  
+  setTimeout(() => {
+    toast.style.animation = 'slideInRight 0.3s ease-out reverse';
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
+}
+
+// Handle login form submission
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  const button = document.getElementById('loginButton');
+  const originalText = button.textContent;
+  
+  // Disable button and show loading state
+  button.disabled = true;
+  button.classList.add('btn-loading');
+  button.textContent = 'Signing in...';
+  
+  const formData = new FormData(this);
+  
+  fetch('/api/login/', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.status === 'success') {
+      showToast('Login successful! Redirecting...', 'success');
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 1000);
+    } else {
+      showToast(data.message, 'error');
+      button.disabled = false;
+      button.classList.remove('btn-loading');
+      button.textContent = originalText;
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    showToast('An error occurred. Please try again.', 'error');
+    button.disabled = false;
+    button.classList.remove('btn-loading');
+    button.textContent = originalText;
+  });
+});
+</script>
 {% endblock content %}

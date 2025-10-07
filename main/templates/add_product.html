@@ -1,51 +1,172 @@
 {% extends 'base.html' %}
 {% block meta %}
-<title>Add Product - FootBallShop</title>
+<title>Add Product - voltrexpedia</title>
+<style>
+  .image-upload-area {
+    position: relative;
+    border: 2px dashed #93BFCF;
+    border-radius: 0.5rem;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #EEE9DA 0%, #ffffff 100%);
+    cursor: pointer;
+  }
+  
+  .image-upload-area:hover {
+    border-color: #6096B4;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(96, 150, 180, 0.2);
+  }
+  
+  .image-upload-area.drag-over {
+    border-color: #6096B4;
+    background-color: rgba(96, 150, 180, 0.1);
+  }
+  
+  #imagePreview {
+    max-width: 100%;
+    max-height: 300px;
+    margin: 1rem auto;
+    border-radius: 0.5rem;
+    display: none;
+    animation: scaleIn 0.5s ease-out;
+  }
+  
+  .upload-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    animation: bounce 2s ease-in-out infinite;
+  }
+  
+  .form-field {
+    opacity: 0;
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+  
+  .form-field:nth-child(1) { animation-delay: 0.1s; }
+  .form-field:nth-child(2) { animation-delay: 0.2s; }
+  .form-field:nth-child(3) { animation-delay: 0.3s; }
+  .form-field:nth-child(4) { animation-delay: 0.4s; }
+  .form-field:nth-child(5) { animation-delay: 0.5s; }
+  .form-field:nth-child(6) { animation-delay: 0.6s; }
+  .form-field:nth-child(7) { animation-delay: 0.7s; }
+  .form-field:nth-child(8) { animation-delay: 0.8s; }
+  .form-field:nth-child(9) { animation-delay: 0.9s; }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+</style>
 {% endblock meta %}
 
 {% block content %}
 {% include 'navbar.html' %}
 <div class="w-full min-h-screen" style="background: linear-gradient(135deg, #EEE9DA 0%, #BDCDD6 50%, #93BFCF 100%);">
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-8">
-   
+    
     <!-- Back Navigation -->
-    <div class="mb-6">
-      <a href="{% url 'main:show_main' %}" class="font-medium transition-colors" style="color: #6096B4;" onmouseover="this.style.color='#4A7A94'" onmouseout="this.style.color='#6096B4'">
-        ← Back to Home
+    <div class="mb-6 animate-slide-left">
+      <a href="{% url 'main:show_main' %}" class="font-medium transition-colors inline-flex items-center gap-2" style="color: #6096B4;" onmouseover="this.style.color='#4A7A94'" onmouseout="this.style.color='#6096B4'">
+        <span>←</span> Back to Home
       </a>
     </div>
-   
+    
     <!-- Form -->
-    <div class="bg-white rounded-lg p-6 sm:p-8 form-style" style="border: 2px solid #BDCDD6; box-shadow: 0 4px 12px rgba(96, 150, 180, 0.2);">
+    <div class="bg-white rounded-lg p-6 sm:p-8 form-style animate-fade-in" style="border: 2px solid #BDCDD6; box-shadow: 0 4px 12px rgba(96, 150, 180, 0.2);">
       <div class="mb-8 text-center">
+        <div class="text-6xl mb-4 animate-bounce">📦</div>
         <h1 class="text-2xl font-bold mb-2" style="color: #6096B4;">Add New Product</h1>
-        <p style="color: #93BFCF;">Add a new product</p>
+        <p style="color: #93BFCF;">Fill in the details to add a new product to your shop</p>
       </div>
-     
-      <form method="POST" enctype="multipart/form-data" class="space-y-6">
+  
+      <form method="POST" enctype="multipart/form-data" class="space-y-6" id="productForm">
         {% csrf_token %}
+        
         {% for field in form %}
-          <div class="rounded-md p-4" style="border: 2px solid #93BFCF; background-color: #EEE9DA;">
-            <label for="{{ field.id_for_label }}" class="block text-sm font-medium mb-2" style="color: #6096B4;">
-              {{ field.label }}
-            </label>
-            <div class="w-full">
-              {{ field }}
+          {% if field.name == 'thumbnail' %}
+            <!-- Image Upload Area for Thumbnail -->
+            <div class="form-field">
+              <label class="block text-sm font-medium mb-2" style="color: #6096B4;">
+                🖼️ {{ field.label }}
+              </label>
+              <div class="image-upload-area" id="imageUploadArea">
+                <div class="upload-icon">🖼️</div>
+                <p class="text-lg font-medium mb-2" style="color: #6096B4;">Enter image URL below</p>
+                <p class="text-sm" style="color: #93BFCF;">Paste the URL of your product image</p>
+                <img id="imagePreview" alt="Preview">
+              </div>
+              <div class="mt-4 rounded-md p-4" style="border: 2px solid #93BFCF; background-color: #EEE9DA;">
+                <div class="w-full">
+                  {{ field }}
+                </div>
+                {% if field.help_text %}
+                  <p class="mt-1 text-sm" style="color: #93BFCF;">{{ field.help_text }}</p>
+                {% endif %}
+                {% for error in field.errors %}
+                  <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+                {% endfor %}
+              </div>
             </div>
-            {% if field.help_text %}
-              <p class="mt-1 text-sm" style="color: #93BFCF;">{{ field.help_text }}</p>
-            {% endif %}
-            {% for error in field.errors %}
-              <p class="mt-1 text-sm text-red-600">{{ error }}</p>
-            {% endfor %}
-          </div>
+          {% else %}
+            <!-- Regular Form Fields -->
+            <div class="form-field rounded-md p-4" style="border: 2px solid #93BFCF; background-color: #EEE9DA;">
+              <label for="{{ field.id_for_label }}" class="block text-sm font-medium mb-2" style="color: #6096B4;">
+                {% if field.name == 'brand' %}
+                  🏷️ {{ field.label }}
+                {% elif field.name == 'name' %}
+                  📝 {{ field.label }}
+                {% elif field.name == 'price' %}
+                  💰 {{ field.label }}
+                {% elif field.name == 'description' %}
+                  📄 {{ field.label }}
+                {% elif field.name == 'rating' %}
+                  ⭐ {{ field.label }}
+                {% elif field.name == 'category' %}
+                  📂 {{ field.label }}
+                {% elif field.name == 'is_featured' %}
+                  ✨ {{ field.label }}
+                {% else %}
+                  {{ field.label }}
+                {% endif %}
+              </label>
+              <div class="w-full">
+                {{ field }}
+              </div>
+              {% if field.help_text %}
+                <p class="mt-1 text-sm" style="color: #93BFCF;">{{ field.help_text }}</p>
+              {% endif %}
+              {% for error in field.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+              {% endfor %}
+            </div>
+          {% endif %}
         {% endfor %}
 
         <div class="flex flex-col sm:flex-row gap-4 pt-6" style="border-top: 2px solid #BDCDD6;">
-          <a href="{% url 'main:show_main' %}" class="order-2 sm:order-1 px-6 py-3 rounded-md font-medium text-center transition-colors" style="border: 2px solid #93BFCF; color: #6096B4;" onmouseover="this.style.backgroundColor='#EEE9DA'" onmouseout="this.style.backgroundColor='transparent'">
+          <a href="{% url 'main:show_main' %}" class="order-2 sm:order-1 px-6 py-3 rounded-md font-medium text-center transition-all hover:scale-105" style="border: 2px solid #93BFCF; color: #6096B4;" onmouseover="this.style.backgroundColor='#EEE9DA'" onmouseout="this.style.backgroundColor='transparent'">
             Cancel
           </a>
-          <button type="submit" class="order-1 sm:order-2 flex-1 text-white px-6 py-3 rounded-md font-medium transition-colors" style="background-color: #6096B4;" onmouseover="this.style.backgroundColor='#4A7A94'" onmouseout="this.style.backgroundColor='#6096B4'">
+          <button type="submit" class="order-1 sm:order-2 flex-1 text-white px-6 py-3 rounded-md font-medium transition-all hover:scale-105 flex items-center justify-center gap-2" style="background-color: #6096B4;" onmouseover="this.style.backgroundColor='#4A7A94'" onmouseout="this.style.backgroundColor='#6096B4'">
+            <span>✓</span>
             Add Product
           </button>
         </div>
@@ -53,4 +174,76 @@
     </div>
   </div>
 </div>
+
+<script>
+  // Image Preview Functionality
+  const thumbnailInput = document.getElementById('id_thumbnail');
+  const imagePreview = document.getElementById('imagePreview');
+  const uploadArea = document.getElementById('imageUploadArea');
+
+  if (thumbnailInput) {
+    // On change event
+    thumbnailInput.addEventListener('change', function() {
+      const url = this.value;
+      if (url) {
+        imagePreview.src = url;
+        imagePreview.style.display = 'block';
+      }
+    });
+
+    // On input event (real-time)
+    thumbnailInput.addEventListener('input', function() {
+      const url = this.value;
+      if (url) {
+        imagePreview.src = url;
+        imagePreview.style.display = 'block';
+      } else {
+        imagePreview.style.display = 'none';
+      }
+    });
+
+    // On blur - validate if image loads
+    thumbnailInput.addEventListener('blur', function() {
+      const url = this.value;
+      if (url) {
+        const img = new Image();
+        img.onload = function() {
+          imagePreview.src = url;
+          imagePreview.style.display = 'block';
+        };
+        img.onerror = function() {
+          imagePreview.style.display = 'none';
+        };
+        img.src = url;
+      }
+    });
+  }
+
+  // Drag and drop effect (visual only)
+  if (uploadArea) {
+    uploadArea.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      this.classList.add('drag-over');
+    });
+
+    uploadArea.addEventListener('dragleave', function() {
+      this.classList.remove('drag-over');
+    });
+
+    uploadArea.addEventListener('drop', function(e) {
+      e.preventDefault();
+      this.classList.remove('drag-over');
+    });
+  }
+
+  // Form validation animation
+  const form = document.getElementById('productForm');
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      const button = this.querySelector('button[type="submit"]');
+      button.innerHTML = '<span class="icon-spin inline-block">⏳</span> Adding Product...';
+      button.disabled = true;
+    });
+  }
+</script>
 {% endblock %}

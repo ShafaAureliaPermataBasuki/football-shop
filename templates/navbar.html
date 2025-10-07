@@ -1,19 +1,20 @@
 {% load static %}
 
-<nav class="fixed top-0 left-0 w-full bg-gradient-to-r from-blue-900 to-blue-800 border-b border-blue-700 shadow-lg z-50">
+<nav class="fixed top-0 left-0 w-full bg-blue-700 border-b border-gray-200 shadow-sm z-50">
   <div class="max-w-7xl mx-auto px-6 lg:px-8">
     <div class="flex items-center justify-between h-16">
       <div class="flex items-center">
         <h1 class="text-xl font-semibold">
           <a href="{% url 'main:show_main' %}" class="flex items-center">
             <img src="{% static 'image/Logo.jpg' %}" alt="Logo" class="inline h-8 w-8 mr-2">
-            <span class="bg-gradient-to-r from-red-500 to-red-800 bg-clip-text text-transparent font-bold">FootBall</span>
-            <span class="text-white">Shop</span>
+            <span style="background: linear-gradient(180deg,#14919B 20%, #0AD1C8 50%, #45DFB1 50%, #80ED99 110%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">voltrex</span>
+            <span style="background: linear-gradient(180deg, #6FE5A8 0%, #A8F0B8 25%, #D4F5A6 50%, #F5F5A0 75%, #FFF9C4 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">pedia</span>
           </a>
         </h1>
       </div>
       
       <!-- Desktop Navigation -->
+      
       <div class="hidden md:flex items-center space-x-8">
         <a href="/" class="text-blue-100 hover:text-white font-medium hover:scale-105 transition-all duration-100">
           Home
@@ -39,7 +40,7 @@
             <div class="text-sm font-medium text-white">{{ name|default:user.username }}</div>
             <div class="text-xs text-blue-200">{{ npm|default:"2406432236" }} - {{ class|default:"PBP C" }}</div>
           </div>
-          <a href="{% url 'main:logout' %}" class="text-red-400 hover:text-red-300 font-medium transition-colors">
+          <a href="{% url 'main:logout' %}" class="text-red-600 hover:text-red-800 font-medium transition-colors">
             Logout
           </a>
         {% else %}

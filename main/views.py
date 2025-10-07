@@ -17,13 +17,37 @@ from django.views.decorators.http import require_POST, require_http_methods
 
 @login_required(login_url='/login')
 def show_main(request):
+    # Ambil filter dari query parameter
+    owner_filter = request.GET.get('owner')
+    category_filter = request.GET.get('category')
+    
+    # Query semua produk
+    product_list = Product.objects.all()
+    
+    # Filter berdasarkan owner
+    if owner_filter == 'my' and request.user.is_authenticated:
+        product_list = product_list.filter(user=request.user)
+    
+    # Filter berdasarkan category
+    if category_filter:
+        if category_filter == "featured":
+            product_list = product_list.filter(is_featured=True)
+        elif category_filter == "hot":
+            product_list = product_list.filter(views__gt=20)
+        elif category_filter in ["shoes", "clothes", "equipment", "accessories", "misc"]:
+            product_list = product_list.filter(category=category_filter)
+    
+    # Urutkan berdasarkan ID terbaru
+    product_list = product_list.order_by('-id')
+    
     context = {
         'npm': '2406432236',
         'name': request.user.username,
         'class': 'PBP C',
-        'last_login': request.COOKIES.get('last_login', 'Never')
+        'last_login': request.COOKIES.get('last_login', 'Never'),
+        'product_list': product_list,  # Tambahkan ini!
     }
-    return render(request, "main.html", context)
+    return render(request, "main.html", context)git add .
 
 # AJAX endpoint untuk mendapatkan product list
 @login_required(login_url='/login')

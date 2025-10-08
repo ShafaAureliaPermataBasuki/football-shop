@@ -47,7 +47,7 @@ def show_main(request):
         'last_login': request.COOKIES.get('last_login', 'Never'),
         'product_list': product_list,  # Tambahkan ini!
     }
-    return render(request, "main.html", context)git add .
+    return render(request, "main.html", context)
 
 # AJAX endpoint untuk mendapatkan product list
 @login_required(login_url='/login')

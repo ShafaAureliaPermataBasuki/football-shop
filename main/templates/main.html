@@ -513,7 +513,24 @@ opacity: 0.9;
     {% endif %}
   </div>
  
+<!-- Loading Skeleton -->
+<div id="loadingSkeleton" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 hidden">
+  {% for i in "12345678" %}
+  <div class="bg-white rounded-2xl overflow-hidden" style="border: 2px solid #BDCDD6;">
+    <div class="skeleton aspect-square"></div>
+    <div class="p-5 space-y-3">
+      <div class="skeleton h-4 w-24 rounded"></div>
+      <div class="skeleton h-6 w-full rounded"></div>
+      <div class="skeleton h-6 w-3/4 rounded"></div>
+      <div class="skeleton h-4 w-32 rounded"></div>
+      <div class="skeleton h-10 w-full rounded-lg"></div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
 
+<!-- Product Grid (will be populated by AJAX) -->
+<div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
 
   <!-- Products Grid -->
   {% if not product_list %}
@@ -698,7 +715,105 @@ retina_detect: true
 });
 </script>
 
+<!-- Floating Action Buttons -->
+<div class="fixed bottom-8 right-8 flex flex-col gap-4 z-40">
+  <!-- Scroll to Top -->
+  <button 
+    id="scrollToTop"
+    onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
+    class="hidden w-14 h-14 rounded-full text-white shadow-2xl transition-all hover:scale-110"
+    style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"
+    title="Scroll to top">
+    <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+    </svg>
+  </button>
+  
+  <!-- Refresh Products -->
+  <button 
+    onclick="refreshProducts()"
+    class="w-14 h-14 rounded-full text-white shadow-2xl transition-all hover:scale-110 hover:rotate-180"
+    style="background-color: #6096B4;"
+    title="Refresh products">
+    <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+    </svg>
+  </button>
+</div>
 
+<script>
+// Show scroll to top button
+window.addEventListener('scroll', () => {
+  const scrollBtn = document.getElementById('scrollToTop');
+  if (window.pageYOffset > 300) {
+    scrollBtn.classList.remove('hidden');
+  } else {
+    scrollBtn.classList.add('hidden');
+  }
+});
+
+// AJAX Product Loader
+async function refreshProducts() {
+  const productGrid = document.getElementById('productGrid');
+  const skeleton = document.getElementById('loadingSkeleton');
+  
+  // Show skeleton
+  productGrid.classList.add('hidden');
+  skeleton.classList.remove('hidden');
+  
+  try {
+    const response = await fetch('/api/products/{{ request.GET.urlencode }}');
+    const products = await response.json();
+    
+    // Hide skeleton, show products
+    skeleton.classList.add('hidden');
+    productGrid.classList.remove('hidden');
+    
+    // Render products
+    productGrid.innerHTML = products.map((product, index) => `
+      <div class="stagger-item" style="animation-delay: ${index * 0.1}s;">
+        ${renderProductCard(product)}
+      </div>
+    `).join('');
+    
+    document.getElementById('resultCount').textContent = products.length;
+    showToast(`Loaded ${products.length} products!`, 'success');
+    
+  } catch (error) {
+    console.error('Error loading products:', error);
+    showToast('Failed to load products', 'error');
+    skeleton.classList.add('hidden');
+    productGrid.classList.remove('hidden');
+  }
+}
+
+// Render product card (simplified - adjust based on your card_product.html)
+function renderProductCard(product) {
+  return `
+    <article class="glass-card card-3d rounded-2xl overflow-hidden relative h-full flex flex-col">
+      <!-- Use your existing card_product.html structure here -->
+      <div class="relative aspect-square overflow-hidden group">
+        <a href="/product/${product.id}/">
+          <img src="${product.thumbnail}" alt="${product.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+        </a>
+      </div>
+      <div class="p-6 flex-grow flex flex-col">
+        <h5 class="text-sm mb-1 font-medium" style="color: #6096B4;">🏷️ ${product.brand}</h5>
+        <h3 class="text-lg font-bold mb-3">${product.name}</h3>
+        <h4 class="text-xl font-bold mb-3" style="color: #22c55e;">💵 Rp ${product.price.toLocaleString('id-ID')}</h4>
+        <a href="/product/${product.id}/" class="mt-auto text-white font-bold py-3 rounded-xl text-center" style="background: linear-gradient(to right, #6096B4, #93BFCF);">
+          🔎 View Details
+        </a>
+      </div>
+    </article>
+  `;
+}
+
+// Load products on page load
+document.addEventListener('DOMContentLoaded', () => {
+  refreshProducts();
+});
+</script>
 
 
 {% endblock content %}
